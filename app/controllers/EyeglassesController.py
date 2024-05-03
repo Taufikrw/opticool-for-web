@@ -50,6 +50,45 @@ def save():
     except Exception as e:
         return response.error(str(e), 500)
 
+def edit(id):
+    try:
+        link = request.form.get('link')
+        name = request.form.get('name')
+        brand = request.form.get('brand')
+        price = request.form.get('price')
+        gender = request.form.get('gender')
+
+        product = Eyeglasses.query.filter_by(id = id).first()
+        if not product:
+            return response.error("Data Not Found", 404)
+
+        product.link = link
+        product.name = name
+        product.brand = brand
+        product.price = price
+        product.gender = gender
+
+        db.session.commit()
+        data = singleObject(product)
+
+        return response.success(data, "Data updated successfully")
+    except Exception as e:
+        return response.error(str(e), 500)
+
+def delete(id):
+    try:
+        product = Eyeglasses.query.filter_by(id = id).first()
+        if not product:
+            return response.error("Data Not Found", 404)
+        
+        db.session.delete(product)
+        db.session.commit()
+
+        return response.success({}, "Product deleted successfully")
+
+    except Exception as e:
+        return response.error(str(e), 500)
+
 def formatArray(datas):
     arr = []
 
