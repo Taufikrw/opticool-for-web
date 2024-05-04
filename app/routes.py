@@ -1,5 +1,5 @@
 from app import app
-from app.controllers import EyeglassesController
+from app.controllers import EyeglassesController, UserController
 from flask import request
 
 @app.route('/products', methods = ['GET'])
@@ -20,3 +20,7 @@ def detail_product(productId):
 @app.route('/products/create', methods = ['POST'])
 def create_product():
     return EyeglassesController.save()
+
+@app.route('/register', methods = ['POST'])
+def create_user():
+    return UserController.save()
