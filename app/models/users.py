@@ -1,6 +1,5 @@
-from app import db
+from app import db, bcrypt
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 
 class Users(db.Model):
     id = db.Column(db.BigInteger, primary_key = True, autoincrement = True)
@@ -14,7 +13,7 @@ class Users(db.Model):
         return '<Users {}>'.format(self.name)
 
     def setPassword(self, password):
-        self.password = generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password)
     
     def checkPassword(self, password):
-        return check_password_hash(self.password, password)
+        return bcrypt.check_password_hash(self.password, password)

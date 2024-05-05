@@ -24,3 +24,7 @@ def create_product():
 @app.route('/register', methods = ['POST'])
 def create_user():
     return UserController.save()
+
+@app.route('/login', methods = ['POST'])
+def login():
+    return UserController.login()
