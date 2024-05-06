@@ -1,17 +1,26 @@
-from app import app
+from app import app, response
 from app.controllers import EyeglassesController, UserController
 from flask import request
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
+@app.route('/protected', methods = ['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return response.success(current_user, 'Success get user')
 
 @app.route('/products', methods = ['GET'])
 def get_products():
     return EyeglassesController.index()
 
-@app.route('/products/<productId>', methods = ['GET', 'PUT', 'DELETE'])
+@app.route('/products/<productId>', methods = ['GET'])
 def detail_product(productId):
-    if request.method == 'GET':
-        return EyeglassesController.detail(productId)
-    
-    elif request.method == 'PUT':
+    return EyeglassesController.detail(productId)
+
+@app.route('/products/<productId>', methods = ['PUT', 'DELETE'])
+@jwt_required()
+def update_product(productId):
+    if request.method == 'PUT':
         return EyeglassesController.edit(productId)
     
     elif request.method == 'DELETE':
