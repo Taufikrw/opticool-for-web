@@ -1,7 +1,10 @@
 from app.models.eyeglasses import Eyeglasses
 
-from app import app, db, response
+from app import app, db, response, uploadconfig
 from flask import request
+from werkzeug.utils import secure_filename
+
+import os, uuid
 
 def index():
     try:
@@ -33,16 +36,29 @@ def save():
         brand = request.form.get('brand')
         price = request.form.get('price')
         gender = request.form.get('gender')
+        if 'picture' not in request.files:
+            return response.error("No file part in the request", 400)
 
-        data = Eyeglasses(
-            link = link, 
-            name = name, 
-            brand = brand, 
-            price = price, 
-            gender = gender
-        )
-        db.session.add(data)
-        db.session.commit()
+        linkPic1 = request.files['picture']
+        if linkPic1.filename == '':
+            return response.error("No selected file", 400)
+        if linkPic1 and uploadconfig.allowed_file(linkPic1.filename):
+            uid = uuid.uuid4()
+            filetype = linkPic1.filename.rsplit('.', 1)[1].lower()
+            renamefile = str(uid) + '.' + filetype
+            linkPic1.save(os.path.join(app.config['UPLOAD_FOLDER'], renamefile))
+            data = Eyeglasses(
+                link = link, 
+                name = name, 
+                brand = brand, 
+                price = price, 
+                gender = gender,
+                linkPic1 = renamefile
+            )
+            db.session.add(data)
+            db.session.commit()
+        else:
+            return response.error("Invalid file type")
         
         new_product = Eyeglasses.query.filter_by(id = data.id).first()
         data = singleObject(new_product)
@@ -61,6 +77,13 @@ def edit(id):
         product = Eyeglasses.query.filter_by(id = id).first()
         if not product:
             return response.error("Data Not Found", 404)
+        
+        linkPic1 = request.files.get('picture')
+        if linkPic1:
+            old_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], product.linkPic1)
+            if os.path.exists(old_picture_path):
+                os.remove(old_picture_path)
+            linkPic1.save(os.path.join(app.config['UPLOAD_FOLDER'], product.linkPic1))
 
         product.link = link
         product.name = name
@@ -80,6 +103,10 @@ def delete(id):
         product = Eyeglasses.query.filter_by(id = id).first()
         if not product:
             return response.error("Data Not Found", 404)
+
+        picture_path = os.path.join(app.config['UPLOAD_FOLDER'], product.linkPic1)
+        if os.path.exists(picture_path):
+            os.remove(picture_path)
         
         db.session.delete(product)
         db.session.commit()
