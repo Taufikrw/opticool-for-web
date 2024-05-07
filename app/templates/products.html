@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Products
+{% endblock %}
+
+{% block page_content %}
+<div class="row row-cols-5 py-5 g-4">
+    {% for item in data %}
+    <div class="col">
+        <div class="card h-100 border-0 rounded-0">
+            {% if item.linkPic1 %}
+            {% if item.linkPic1.startswith('http') %}
+            <img src="{{ item.linkPic1 }}" alt="{{ item.name }}" class="card-img-top">
+            {% else %}
+            <img src="{{ url_for('static', filename='files/' + item.linkPic1) }}" alt="{{ item.name }}"
+            class="card-img-top">
+            {% endif %}
+            {% else %}
+            <img src="https://via.placeholder.com/950x450" alt="{{ item.name }}" class="card-img-top">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title product-name">{{ item.name }}</h5>
+                <p class="card-text">Rp.{{ item.price }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ item.link }}" class="text-decoration-none">Buy Product</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

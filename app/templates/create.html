@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create
+{% endblock %}
+
+{% block page_content %}
+<div class="row justify-content-center my-5">
+    <div class="col-6">
+        <h2 class="mb-5 mt-3 text-center">Create Eyeglasses</h2>
+        <form action="/create" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.name.label(for="name") }}
+                {{ form.name(id="name", class="form-control") }}
+
+                {% if form.name.errors %}
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.brand.label(for="brand")}}
+                {{ form.brand(id="brand", class="form-control")}}
+
+                {% if form.brand.errors %}
+                <ul class="text-danger">
+                    {% for error in form.brand.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.price.label(for="price") }}
+                {{ form.price(id="price", class="form-control") }}
+
+                {% if form.price.errors %}
+                <ul>
+                    {% for error in form.price.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.gender.label(for="gender") }}
+                {{ form.gender(id="gender", class="form-control") }}
+
+                {% if form.gender.errors %}
+                <ul>
+                    {% for error in form.gender.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.link.label(for="link") }}
+                {{ form.link(id="link", class="form-control") }}
+
+                {% if form.link.errors %}
+                <ul>
+                    {% for error in form.link.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.linkPic1.label(for="linkPic") }}
+                {{ form.linkPic1(id="linkPic", class="form-control") }}
+
+                {% if form.linkPic1.errors %}
+                <ul>
+                    {% for error in form.linkPic1.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="text-end mt-5">
+                <a href="/dashboard" class="btn btn-secondary col-4">Back to Dashboard</a>
+                {{ form.submit(class="btn btn-primary col-3") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

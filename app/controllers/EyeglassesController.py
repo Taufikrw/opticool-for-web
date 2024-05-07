@@ -39,7 +39,7 @@ def save():
         if 'picture' not in request.files:
             return response.error("No file part in the request", 400)
 
-        linkPic1 = request.files['picture']
+        linkPic1 = request.files.get('picture')
         if linkPic1.filename == '':
             return response.error("No selected file", 400)
         if linkPic1 and uploadconfig.allowed_file(linkPic1.filename):
