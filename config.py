@@ -15,3 +15,5 @@ class Config(object):
 
     UPLOAD_FOLDER = str(os.getenv("UPLOAD_FOLDER"))
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+
+    API_URL = str(os.getenv("API_URL"))

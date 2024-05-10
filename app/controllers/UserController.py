@@ -12,6 +12,10 @@ def save():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        user = Users.query.filter_by(email=email).first()
+        if user:
+            return response.error("Email already registered", 409)
+
         user = Users(
             name = name,
             email = email,
