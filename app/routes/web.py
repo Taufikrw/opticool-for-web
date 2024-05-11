@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, jsonify
+from flask import render_template, request, session
 import requests
 
 @app.route('/', methods = ['GET'])
@@ -29,6 +29,7 @@ def login():
         }
         response = requests.post(api_url, data=login_data)
         if response.status_code == 200:
+            session["token"] = response.json()["data"]["access_token"]
             return render_template('index.html')
         elif response.status_code == 401:
             error = response.json()["status"]["message"]
@@ -60,3 +61,16 @@ def register():
             error = response.json()["status"]["message"]
     
     return render_template('register.html', error = error)
+
+@app.route('/profile')
+def profile():
+    token = session.get('token')
+    api_url = app.config["API_URL"] + '/profile'
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+    response = requests.get(api_url, headers=headers)
+    if response.status_code == 200:
+        return render_template('profile.html', user = response.json()["data"])
+    else:
+        return headers

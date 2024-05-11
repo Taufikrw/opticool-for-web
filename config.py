@@ -17,3 +17,4 @@ class Config(object):
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 
     API_URL = str(os.getenv("API_URL"))
+    SECRET_KEY = str(os.getenv("SECRET_KEY"))

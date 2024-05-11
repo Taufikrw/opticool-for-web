@@ -57,6 +57,14 @@ def login():
     except Exception as e:
         return response.error(str(e), 500)
 
+def showUser():
+    try:
+        current_user = get_jwt_identity()
+        return response.success(current_user, "Success get user")
+    
+    except Exception as e:
+        return response.error(str(e), 500)
+
 def singleObject(data):
     data = {
         'id' : data.id,

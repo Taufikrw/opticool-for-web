@@ -32,3 +32,8 @@ def create_user():
 @app.route('/api/login', methods = ['POST'])
 def login_user():
     return UserController.login()
+
+@app.route('/api/profile', methods = ['GET'])
+@jwt_required()
+def api_profile():
+    return UserController.showUser()

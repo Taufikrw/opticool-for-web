@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block page_content %}
+{% if user %}
+<div class="row justify-content-center mt-5">
+    <div class="col-4">
+        <h3 class="mb-5 mt-3 text-center">Profile</h3>
+        <form>
+            <fieldset disabled>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="{{ user.name }}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" id="email" class="form-control" placeholder="{{ user.email }}">
+                </div>
+            </fieldset>
+        </form>
+        <div class="d-grid gap-2 mt-4">
+            <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
