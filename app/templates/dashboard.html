@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block page_content %}
+
+<div class="mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-success pb-1" role="alert">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <h1 class="d-inine">Dashboard</h1>
+    <div class="d-flex justify-content-end mb-4">
+        <a href="/products/create" class="btn btn-primary">Add Item</a>
+    </div>
+</div>
+
+<table class="table table-striped mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Price</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.brand }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+                <a href="products/{{ item.id }}/update" class="btn btn-secondary">Edit</a>
+                <a href="products/{{ item.id }}/delete" class="btn btn-danger"
+                    onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

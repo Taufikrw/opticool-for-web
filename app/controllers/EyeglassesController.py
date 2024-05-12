@@ -58,7 +58,7 @@ def save():
             db.session.add(data)
             db.session.commit()
         else:
-            return response.error("Invalid file type")
+            return response.error("Invalid file type", 400)
         
         new_product = Eyeglasses.query.filter_by(id = data.id).first()
         data = singleObject(new_product)
