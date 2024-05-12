@@ -30,13 +30,19 @@ def login():
         response = requests.post(api_url, data=login_data)
         if response.status_code == 200:
             session["token"] = response.json()["data"]["access_token"]
-            return render_template('index.html')
+            return render_template('profile.html')
         elif response.status_code == 401:
             error = response.json()["status"]["message"]
         else:
             error = response.json()["status"]["message"]
     
     return render_template('login.html', error = error)
+
+@app.route('/logout', methods = ['GET'])
+def revoke_user():
+    session.pop('token', None)
+    flash("Logout Sukses")
+    return redirect(url_for('login'))
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -54,6 +60,7 @@ def register():
         }
         response = requests.post(api_url, data=new_data)
         if response.status_code == 200:
+            flash(response.json()["status"]["message"])
             return render_template('login.html')
         elif response.status_code == 409:
             error = response.json()["status"]["message"]

@@ -22,10 +22,21 @@ Sign In
                 <a href="/register" class="btn btn-link">Register</a>
             </div>
             {% if error %}
-            <p class="text-danger">
+            <p class="alert alert-danger mt-3">
                 {{ error }}
             </p>
             {% endif %}
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-primary pb-1 mt-3" role="alert">
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endwith %}
         </form>
     </div>
 </div>
