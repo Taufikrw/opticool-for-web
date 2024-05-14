@@ -15,5 +15,5 @@ migrate = Migrate(app, db)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
-from app.routes import api, web
+from app.routes import api, web, errors
 from app.models import users, eyeglasses
