@@ -2,6 +2,9 @@ from app import app
 from flask import render_template, request, session, flash, redirect, url_for, abort
 import requests
 
+def index():
+    return render_template('index.html')
+
 def show_all_product():
     api_url = app.config["API_URL"] + '/products'
     response = requests.get(api_url).json()

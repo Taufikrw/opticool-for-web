@@ -1,11 +1,9 @@
 from app import app
 from app.controllers import ApiController
-from flask import render_template, request, session, redirect, url_for, flash, abort
-import requests
 
 @app.route('/', methods = ['GET'])
 def index():
-    return render_template('index.html')
+    return ApiController.index()
 
 @app.route('/products', methods = ['GET'])
 def show_products():
