@@ -37,3 +37,7 @@ def login_user():
 @jwt_required()
 def api_profile():
     return UserController.showUser()
+
+@app.route('/api/predict', methods = ['POST'])
+def predict():
+    return EyeglassesController.predict()

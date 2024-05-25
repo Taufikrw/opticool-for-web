@@ -88,7 +88,7 @@ def dashboard():
     
     return redirect(url_for('login'))
 
-def create_product(productId):
+def create_product():
     token = session.get('token')
     if token:
         error = None

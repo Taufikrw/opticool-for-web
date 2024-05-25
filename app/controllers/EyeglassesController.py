@@ -1,10 +1,12 @@
 from app.models.eyeglasses import Eyeglasses
 
-from app import app, db, response, uploadconfig
+from app import app, db, response, uploadconfig, model, class_names
 from flask import request
 from werkzeug.utils import secure_filename
 
-import os, uuid
+import os, uuid, cv2
+import tensorflow as tf
+import numpy as np
 
 def index():
     try:
@@ -115,6 +117,37 @@ def delete(id):
 
     except Exception as e:
         return response.error(str(e), 500)
+
+def predict():
+    try:
+        image_file = request.files["image"]
+
+        if image_file and uploadconfig.allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER_ML'], filename)
+            image_file.save(filepath)
+
+            image = cv2.imread(filepath)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+            resized_image = tf.image.resize(image, (250, 190))
+            normalized_image = resized_image / 255.0
+            input_data = np.expand_dims(normalized_image, axis=0)
+
+            predictions = model.predict(input_data)
+            predicted_class_index = np.argmax(predictions, axis=1)[0]
+            predicted_class = class_names[predicted_class_index]
+
+            return response.success(predicted_class, "Predict Successfully")
+        else:
+            return response.error("Invalid file format. Please upload a PNG, JPG, or JPEG image.", 400)
+
+    except Exception as e:
+        return response.error(str(e), 500)
+
+def rekomendation(faceshape):
+    product = Eyeglasses.query.filter_by(faceShape = faceshape).limit(5).all()
+    return formatArray(product)
 
 def formatArray(datas):
     arr = []

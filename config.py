@@ -18,3 +18,6 @@ class Config(object):
 
     API_URL = str(os.getenv("API_URL"))
     SECRET_KEY = str(os.getenv("SECRET_KEY"))
+
+    MODEL_FILE = str(os.getenv("MODEL_FILE"))
+    UPLOAD_FOLDER_ML = str(os.getenv("UPLOAD_FOLDER_ML"))

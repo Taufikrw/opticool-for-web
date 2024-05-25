@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
+from tensorflow.keras.models import load_model
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
+model = load_model(app.config["MODEL_FILE"])
+class_names = ['Heart', 'Oval', 'Round', 'Square']
 
 from app.routes import api, web, errors
 from app.models import users, eyeglasses
