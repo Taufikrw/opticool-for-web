@@ -1,9 +1,27 @@
-from app import db, bcrypt
+from app import db, bcrypt, cipher_suite
 from datetime import datetime
+from cryptography.fernet import Fernet
+from config import Config
 
+class EncryptedField(db.TypeDecorator):
+    impl = db.String
+
+    def __init__(self, *args, **kwargs):
+        super(EncryptedField, self).__init__(*args, **kwargs)
+
+    def process_bind_param(self, value, dialect):
+        if value is not None:
+            value = cipher_suite.encrypt(value.encode('utf-8')).decode('utf-8')
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            value = cipher_suite.decrypt(value.encode('utf-8')).decode('utf-8')
+        return value
+    
 class Users(db.Model):
     id = db.Column(db.BigInteger, primary_key = True, autoincrement = True)
-    name = db.Column(db.String(250), nullable = False)
+    name = db.Column(EncryptedField(250), nullable = False)
     email = db.Column(db.String(250), index = True, unique = True, nullable = False)
     password = db.Column(db.String(60), nullable = False)
     gender = db.Column(db.String(20), nullable = False)

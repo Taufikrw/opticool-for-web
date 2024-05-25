@@ -11,6 +11,8 @@ def save():
         name = request.form.get('name')
         email = request.form.get('email')
         password = request.form.get('password')
+        birthday = request.form.get('birthday')
+        gender = request.form.get('gender')
 
         user = Users.query.filter_by(email=email).first()
         if user:
@@ -19,6 +21,8 @@ def save():
         user = Users(
             name = name,
             email = email,
+            birthday = birthday,
+            gender = gender
         )
         user.setPassword(password)
         db.session.add(user)
@@ -70,6 +74,8 @@ def singleObject(data):
         'id' : data.id,
         'name' : data.name,
         'email' : data.email,
+        'gender' : data.gender,
+        'birthday' : data.birthday
     }
 
     return data

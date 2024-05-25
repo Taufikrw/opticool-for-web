@@ -6,6 +6,7 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from tensorflow.keras.models import load_model
+from cryptography.fernet import Fernet
 
 load_dotenv()
 
@@ -17,6 +18,8 @@ jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 model = load_model(app.config["MODEL_FILE"])
 class_names = ['Heart', 'Oval', 'Round', 'Square']
+key = app.config["ENCRYPTION_KEY"]
+cipher_suite = Fernet(key)
 
 from app.routes import api, web, errors
 from app.models import users, eyeglasses

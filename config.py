@@ -1,4 +1,5 @@
 import os
+from cryptography.fernet import Fernet
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -21,3 +22,4 @@ class Config(object):
 
     MODEL_FILE = str(os.getenv("MODEL_FILE"))
     UPLOAD_FOLDER_ML = str(os.getenv("UPLOAD_FOLDER_ML"))
+    ENCRYPTION_KEY = Fernet.generate_key()
