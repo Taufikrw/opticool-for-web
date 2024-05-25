@@ -29,9 +29,20 @@ Edit
                 </div>
             </div>
             <div class="mb-3">
+                <label for="faceshape">Face Shape:</label>
+                <select class="form-select" name="faceshape" id="faceshape" aria-label="Default select example">
+                    <option value="triangle" {% if data.faceShape == "triangle" %} selected {% endif %}>Triangle</option>
+                    <option value="heart" {% if data.faceShape == "heart" %} selected {% endif %}>Heart</option>
+                    <option value="oval" {% if data.faceShape == "oval" %} selected {% endif %}>Oval</option>
+                    <option value="round" {% if data.faceShape == "round" %} selected {% endif %}>Round</option>
+                    <option value="square" {% if data.faceShape == "square" %} selected {% endif %}>Square</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <div class="mb-3">
                     <label for="gender">Gender:</label>
-                    <input type="text" id="gender" name="gender" class="form-control" value="{{ data.gender }}" required>
+                    <input type="text" id="gender" name="gender" class="form-control" value="{{ data.gender }}"
+                        required>
                 </div>
             </div>
             <div class="mb-3">

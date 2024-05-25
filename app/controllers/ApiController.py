@@ -105,6 +105,7 @@ def create_product():
             brand = request.form.get('brand')
             price = request.form.get('price')
             gender = request.form.get('gender')
+            faceshape = request.form.get('faceshape')
             picture = request.files['picture']
             picture_content = picture.read()
             
@@ -112,6 +113,7 @@ def create_product():
                 'link': link,
                 'name': name,
                 'brand': brand,
+                'faceshape': faceshape,
                 'price': price,
                 'gender': gender
             }
@@ -144,6 +146,7 @@ def update_product(productId):
                 name = request.form.get('name')
                 brand = request.form.get('brand')
                 price = request.form.get('price')
+                faceshape = request.form.get('faceshape')
                 gender = request.form.get('gender')
                 picture = request.files['picture']
                 picture_content = picture.read()
@@ -153,6 +156,7 @@ def update_product(productId):
                     'name': name,
                     'brand': brand,
                     'price': price,
+                    'faceshape': faceshape,
                     'gender': gender
                 }
                 files = {'picture': (picture.filename, picture_content)}

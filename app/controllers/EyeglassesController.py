@@ -38,6 +38,7 @@ def save():
         brand = request.form.get('brand')
         price = request.form.get('price')
         gender = request.form.get('gender')
+        faceshape = request.form.get('faceshape')
         if 'picture' not in request.files:
             return response.error("No file part in the request", 400)
 
@@ -52,7 +53,8 @@ def save():
             data = Eyeglasses(
                 link = link, 
                 name = name, 
-                brand = brand, 
+                brand = brand,
+                faceShape = faceshape, 
                 price = price, 
                 gender = gender,
                 linkPic1 = renamefile
@@ -74,6 +76,7 @@ def edit(id):
         name = request.form.get('name')
         brand = request.form.get('brand')
         price = request.form.get('price')
+        faceshape = request.form.get('faceshape')
         gender = request.form.get('gender')
 
         product = Eyeglasses.query.filter_by(id = id).first()
@@ -92,6 +95,7 @@ def edit(id):
         product.brand = brand
         product.price = price
         product.gender = gender
+        product.faceShape = faceshape
 
         db.session.commit()
         data = singleObject(product)
