@@ -3,6 +3,7 @@ from app.models.eyeglasses import Eyeglasses
 from app import app, db, response, uploadconfig, model, class_names
 from flask import request
 from werkzeug.utils import secure_filename
+from flask_jwt_extended import get_jwt_identity
 
 import os, uuid, cv2
 import tensorflow as tf
@@ -125,6 +126,13 @@ def delete(id):
 def predict():
     try:
         image_file = request.files["image"]
+        gender = get_jwt_identity()["gender"]
+        if gender == "Perempuan":
+            gender = "Women"
+        elif gender == "Laki-Laki":
+            gender = "Men"
+        else:
+            gender == "Unisex"
 
         if image_file and uploadconfig.allowed_file(image_file.filename):
             filename = secure_filename(image_file.filename)
@@ -141,17 +149,27 @@ def predict():
             predictions = model.predict(input_data)
             predicted_class_index = np.argmax(predictions, axis=1)[0]
             predicted_class = class_names[predicted_class_index]
+            data = rekomendation(predicted_class, gender)
 
-            return response.success(predicted_class, "Predict Successfully")
+            return response.success(data, "Predict Successfully")
         else:
             return response.error("Invalid file format. Please upload a PNG, JPG, or JPEG image.", 400)
 
     except Exception as e:
         return response.error(str(e), 500)
 
-def rekomendation(faceshape):
-    product = Eyeglasses.query.filter_by(faceShape = faceshape).limit(5).all()
-    return formatArray(product)
+def rekomendation(faceshape, gender):
+    products = Eyeglasses.query.filter_by(
+        faceShape = faceshape,
+        gender = gender
+    ).limit(5).all()
+    if len(products) < 5:
+        unisex_products = Eyeglasses.query.filter(
+            Eyeglasses.faceShape == faceshape,
+            Eyeglasses.gender == 'Unisex'
+        ).limit(5 - len(products)).all()
+        products.extend(unisex_products)
+    return formatArray(products)
 
 def formatArray(datas):
     arr = []

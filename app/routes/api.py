@@ -39,5 +39,6 @@ def api_profile():
     return UserController.showUser()
 
 @app.route('/api/predict', methods = ['POST'])
+@jwt_required()
 def predict():
     return EyeglassesController.predict()
