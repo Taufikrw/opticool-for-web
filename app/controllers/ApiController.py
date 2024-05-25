@@ -1,5 +1,6 @@
 from app import app
 from flask import render_template, request, session, flash, redirect, url_for, abort
+from datetime import datetime
 import requests
 
 def index():
@@ -45,12 +46,16 @@ def register():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
+        gender = request.form['gender']
+        birthday = request.form['birthday']
         password = request.form['password']
         api_url = app.config["API_URL"] + '/register'
 
         new_data = {
             'name': name,
             'email': email, 
+            'gender': gender,
+            'birthday': birthday,
             'password': password
         }
         response = requests.post(api_url, data=new_data)
@@ -72,7 +77,9 @@ def profile():
     }
     response = requests.get(api_url, headers=headers)
     if response.status_code == 200:
-        return render_template('profile.html', user = response.json()["data"])
+        user_data = response.json()["data"]
+        user_data["birthday"] = date_format(user_data["birthday"])
+        return render_template('profile.html', user = user_data)
     else:
         return redirect(url_for('login'))
 
@@ -181,3 +188,9 @@ def delete_product(productId):
             return redirect(url_for('dashboard'))
     
     return redirect(url_for('login'))
+
+def date_format(date):
+    date_string = date
+    date_obj = datetime.strptime(date_string, "%a, %d %b %Y %H:%M:%S %Z")
+    formatted_date = date_obj.strftime("%d %B %Y")
+    return formatted_date
