@@ -22,4 +22,4 @@ key = app.config["ENCRYPTION_KEY"]
 cipher_suite = Fernet(key)
 
 from app.routes import api, web, errors
-from app.models import users, eyeglasses
+from app.models import users, eyeglasses, encryptedfield

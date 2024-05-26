@@ -1,23 +1,6 @@
-from app import db, bcrypt, cipher_suite
+from app import db, bcrypt
 from datetime import datetime
-from cryptography.fernet import Fernet
-from config import Config
-
-class EncryptedField(db.TypeDecorator):
-    impl = db.String
-
-    def __init__(self, *args, **kwargs):
-        super(EncryptedField, self).__init__(*args, **kwargs)
-
-    def process_bind_param(self, value, dialect):
-        if value is not None:
-            value = cipher_suite.encrypt(value.encode('utf-8')).decode('utf-8')
-        return value
-
-    def process_result_value(self, value, dialect):
-        if value is not None:
-            value = cipher_suite.decrypt(value.encode('utf-8')).decode('utf-8')
-        return value
+from app.models.encryptedfield import EncryptedField
     
 class Users(db.Model):
     id = db.Column(db.BigInteger, primary_key = True, autoincrement = True)
