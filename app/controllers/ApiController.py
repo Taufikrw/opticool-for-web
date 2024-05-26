@@ -198,3 +198,32 @@ def date_format(date):
     date_obj = datetime.strptime(date_string, "%a, %d %b %Y %H:%M:%S %Z")
     formatted_date = date_obj.strftime("%d %B %Y")
     return formatted_date
+
+def scan_faceshape():
+    token = session.get("token")
+    if token:
+        result = None
+        product = None
+        error = None
+        if request.method == 'POST':
+            image = request.files['image']
+            image_content = image.read()
+            
+            api_url = app.config["API_URL"] + '/predict'
+            headers = {
+                "Authorization": f"Bearer {token}"
+            }
+            files = {'image': (image.filename, image_content)}
+            response = requests.post(api_url, files=files, headers=headers)
+
+            if response.status_code == 200:
+                result = response.json()["data"]["result"]
+                product = response.json()["data"]["product"]
+                return render_template('scan.html', result = result, product = product)
+            else:
+                error = response.json()["status"]["message"]
+                return render_template('scan.html', error = error)
+        else:
+            return render_template('scan.html')
+    else:
+        return redirect(url_for('login'))

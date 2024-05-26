@@ -149,9 +149,12 @@ def predict():
             predictions = model.predict(input_data)
             predicted_class_index = np.argmax(predictions, axis=1)[0]
             predicted_class = class_names[predicted_class_index]
-            data = rekomendation(predicted_class, gender)
+            product_data = rekomendation(predicted_class, gender)
 
-            return response.success(data, "Predict Successfully")
+            return response.success({
+                "result": predicted_class,
+                "product": product_data
+            }, "Predict Successfully")
         else:
             return response.error("Invalid file format. Please upload a PNG, JPG, or JPEG image.", 400)
 

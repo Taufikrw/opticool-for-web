@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Scan Faceshape
+{% endblock %}
+
+{% block page_content %}
+<div class="row justify-content-center my-5">
+    <div class="col-6">
+        <h2 class="mb-5 mt-3 text-center">Scan your Faceshape</h2>
+        <form action="/scan" method="POST" enctype="multipart/form-data">
+            <div class="mb-3 row">
+                <label for="image" class="form-label">Upload your face image:</label>
+                <div class="col">
+                    <input class="form-control" type="file" id="image" name="image" required>
+                </div>
+                <button type="submit" class="btn btn-primary col-2">Submit</button>
+            </div>
+            {% if error %}
+            <p class="alert alert-danger mt-3 ">
+                {{ error }}
+            </p>
+            {% endif %}
+            {% if result %}
+            <p class="alert alert-success mt-3">
+                Your faceshape is {{ result }}
+            </p>
+            {% endif %}
+        </form>
+    </div>
+    {% if product %}
+    <h5 class="mt-3 text-center">These are some recommended glasses for you</h5>
+    <div class="row row-cols-5 pt-2 pb-5 g-4">
+        {% for item in product %}
+        <div class="col">
+            <div class="card h-100 border-0 rounded-0">
+                {% if item.linkPic1 %}
+                {% if item.linkPic1.startswith('http') %}
+                <img src="{{ item.linkPic1 }}" alt="{{ item.name }}" class="card-img-top">
+                {% else %}
+                <img src="{{ url_for('static', filename='files/' + item.linkPic1) }}" alt="{{ item.name }}"
+                    class="card-img-top">
+                {% endif %}
+                {% else %}
+                <img src="https://via.placeholder.com/950x450" alt="{{ item.name }}" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title product-name">{{ item.name }}</h5>
+                    <p class="card-text">Rp.{{ item.price }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ item.link }}" class="text-decoration-none">Buy Product</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

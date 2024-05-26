@@ -40,3 +40,7 @@ def update_product_db(productId):
 @app.route('/products/<productId>/delete', methods = ['GET'])
 def delete_product(productId):
     return ApiController.delete_product(productId)
+
+@app.route('/scan', methods = ['GET', 'POST'])
+def scan_faceshape():
+    return ApiController.scan_faceshape()
