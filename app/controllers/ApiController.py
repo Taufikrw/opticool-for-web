@@ -8,7 +8,7 @@ def index():
 
 def show_all_product():
     api_url = app.config["API_URL"] + '/products'
-    response = requests.get(api_url).json()
+    response = requests.get(api_url, verify=False).json()
     
     if response['status']['code'] == 200:
         data = response["data"]
@@ -25,7 +25,7 @@ def login():
             'email': email, 
             'password': password
         }
-        response = requests.post(api_url, data=login_data)
+        response = requests.post(api_url, data=login_data, verify=False)
         if response.status_code == 200:
             session["token"] = response.json()["data"]["access_token"]
             return render_template('index.html')
@@ -58,7 +58,7 @@ def register():
             'birthday': birthday,
             'password': password
         }
-        response = requests.post(api_url, data=new_data)
+        response = requests.post(api_url, data=new_data, verify=False)
         if response.status_code == 200:
             flash(response.json()["status"]["message"])
             return render_template('login.html')
@@ -75,7 +75,7 @@ def profile():
     headers = {
         "Authorization": f"Bearer {token}"
     }
-    response = requests.get(api_url, headers=headers)
+    response = requests.get(api_url, headers=headers, verify=False)
     if response.status_code == 200:
         user_data = response.json()["data"]
         user_data["birthday"] = date_format(user_data["birthday"])
@@ -87,7 +87,7 @@ def dashboard():
     token = session.get('token')
     if token:
         api_url = app.config["API_URL"] + '/products'
-        response = requests.get(api_url).json()
+        response = requests.get(api_url, verify=False).json()
         
         if response['status']['code'] == 200:
             data = response["data"]
@@ -123,7 +123,7 @@ def create_product():
             headers = {
                 "Authorization": f"Bearer {token}"
             }
-            response = requests.post(api_url, data=new_product, files=files, headers=headers)
+            response = requests.post(api_url, data=new_product, files=files, headers=headers, verify=False)
             if response.status_code == 200:
                 flash(response.json()["status"]["message"])
                 return redirect(url_for('dashboard'))
@@ -137,7 +137,7 @@ def update_product(productId):
     token = session.get("token")
     if token:
         api_url = app.config["API_URL"] + '/products/' + productId
-        response = requests.get(api_url).json()
+        response = requests.get(api_url, verify=False).json()
 
         if response['status']['code'] == 200:
             data = response["data"]
@@ -164,7 +164,7 @@ def update_product(productId):
                 headers = {
                     "Authorization": f"Bearer {token}"
                 }
-                response = requests.put(api_url, data=update_product, files=files, headers=headers)
+                response = requests.put(api_url, data=update_product, files=files, headers=headers, verify=False)
                 if response.status_code == 200:
                     flash(response.json()["status"]["message"])
                     return redirect(url_for('dashboard'))
@@ -186,7 +186,7 @@ def delete_product(productId):
         headers = {
             "Authorization": f"Bearer {token}"
         }
-        response = requests.delete(api_url, headers=headers)
+        response = requests.delete(api_url, headers=headers, verify=False)
         if response.status_code == 200:
             flash(response.json()["status"]["message"])
             return redirect(url_for('dashboard'))
@@ -214,7 +214,7 @@ def scan_faceshape():
                 "Authorization": f"Bearer {token}"
             }
             files = {'image': (image.filename, image_content)}
-            response = requests.post(api_url, files=files, headers=headers)
+            response = requests.post(api_url, files=files, headers=headers, verify=False)
 
             if response.status_code == 200:
                 result = response.json()["data"]["result"]

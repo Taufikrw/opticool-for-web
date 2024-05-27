@@ -1,4 +1,4 @@
-Flask==3.1.1
+Flask==3.0.3
 Flask-SQLAlchemy==3.0.3
 Flask-Migrate==4.0.7
 Flask-JWT-Extended==4.6.0
@@ -7,3 +7,4 @@ python-dotenv==1.0.1
 tensorflow==2.15.0
 PyMySQL==1.1.1
 cryptography==42.0.7
+opencv-python==4.8.1.78

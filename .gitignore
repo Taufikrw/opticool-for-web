@@ -2,3 +2,5 @@
 .env
 app/static/files
 app/static/faceshape
+cert.pem
+key.pem

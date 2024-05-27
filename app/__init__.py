@@ -12,6 +12,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config.from_object(Config)
+print(app.config["API_URL"])
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
